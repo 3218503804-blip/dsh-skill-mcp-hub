@@ -1,0 +1,52 @@
+{
+  "name": "dsh-skill-mcp-hub",
+  "version": "1.0.0",
+  "description": "One Settings page for DSH: Skills, MCP servers, global prompts and files.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./client/client.js"
+  },
+  "files": [
+    "lib/index.js",
+    "lib/hub-core.js",
+    "client/client.js",
+    "scripts/shim-engine-client.mjs",
+    "cordis.patch.yml",
+    "icon.svg"
+  ],
+  "bin": {
+    "dsh-hub-shim": "scripts/shim-engine-client.mjs"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true,
+      "inject": [
+        "slots"
+      ]
+    }
+  },
+  "dependencies": {
+    "dsh-skill-mcp-manager": "^1.2.2"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "skills",
+    "mcp",
+    "settings",
+    "cordis"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/3218503804-blip/dsh-skill-mcp-hub.git"
+  },
+  "homepage": "https://github.com/3218503804-blip/dsh-skill-mcp-hub"
+}
