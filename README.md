@@ -14,13 +14,15 @@ DSH 里所有「能力」类配置——技能、MCP 服务器、全局指令（
 
 | Tab | What you can do |
 |---|---|
-| **技能** | List every skill (local `$DSH_HOME/skills` + bundled read-only ones), toggle model visibility, **edit `SKILL.md` inline**, create, delete (to `.trash`) |
+| **技能** | List every skill (local `$DSH_HOME/skills` + bundled read-only ones), **search by name / description / path**, toggle model visibility, **edit `SKILL.md` inline**, create, delete (to `.trash`) |
 | **MCP** | Tier per server (eager / on-demand / disabled), per-tool enable/disable, tool counts, details, secret reveal, snapshot refresh, **add / modify servers**, delete |
 | **全局 Prompt** | Read / edit `$DSH_HOME/AGENTS.md`, `$DSH_HOME/CLAUDE.md`, `~/.agents/AGENTS.md`, `~/.agents/CLAUDE.md` (created on save) |
 | **文件** | Browse and edit text files inside the managed roots (`$DSH_HOME`, skills dir, `~/.agents`, `~/.claude`) |
 
 Notes:
 
+- The skill list has a live filter box: it matches name, description, path, provider and source,
+  shows `命中 X / 共 N`, and `Esc` clears it (client-side only — no extra request).
 - Disabling a skill only writes `disable-model-invocation` — the model stops seeing it, but your
   `/name` slash command still works.
 - Bundled skills (inside `app.asar` / `node_modules`) are listed **read-only**; they are never
