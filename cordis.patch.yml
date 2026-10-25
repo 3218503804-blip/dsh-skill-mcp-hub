@@ -1,0 +1,19 @@
+# 能力库（unified hub）bundle patch.
+#
+# One Settings entry, two engines behind it:
+#   - hub-mcp-engine: dsh-skill-mcp-manager mounted as a HOST ROW only. Its package is
+#     a profile dependency but deliberately NOT in dsh.profile.bundles, so its own
+#     settings page is never mounted; it keeps serving the MCP runtime (tiers,
+#     on-demand bridge, per-session instances, snapshots) and its HTTP routes.
+#   - hub: this package — skills / global prompts / files (filesystem level) plus the
+#     single unified UI that also drives the MCP engine through those routes.
+#
+# `profile` must be explicit: the desktop host is launched without `--profile`, and the
+# engine would otherwise reconcile the "web" profile.
+- insert:
+    - id: hub-mcp-engine
+      name: dsh-skill-mcp-manager
+      config:
+        profile: desktop
+    - id: hub
+      name: 'dsh-skill-mcp-hub'
