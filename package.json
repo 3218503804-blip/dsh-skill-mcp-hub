@@ -1,6 +1,6 @@
 {
   "name": "dsh-skill-mcp-hub",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "One Settings page for DSH: Skills, MCP servers, global prompts and files.",
   "type": "module",
   "main": "lib/index.js",
