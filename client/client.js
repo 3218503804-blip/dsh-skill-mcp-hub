@@ -386,6 +386,7 @@ window.__ModuleLoader__.load({ id: "dsh-skill-mcp-hub", factory: (require) => {
     const [original, setOriginal] = useState("");
     const [saving, setSaving] = useState(false);
     const [creating, setCreating] = useState(false);
+    const [query, setQuery] = useState("");
     const [newName, setNewName] = useState("");
     const [newDesc, setNewDesc] = useState("");
 
@@ -471,7 +472,15 @@ window.__ModuleLoader__.load({ id: "dsh-skill-mcp-hub", factory: (require) => {
     }
 
     const skills = state ? state.skills : [];
-    const rows = skills.map((skill) => {
+    const needle = query.trim().toLowerCase();
+    const visible = needle === ""
+      ? skills
+      : skills.filter((skill) => [skill.name, skill.description, skill.path, skill.provider, skill.source]
+          .filter(Boolean)
+          .join(" ")
+          .toLowerCase()
+          .includes(needle));
+    const rows = visible.map((skill) => {
       const isEditing = editing === skill.name;
       return h("li", { key: skill.name, className: "smx-row smx-row--col" },
         h("div", { className: "smx-row__head" },
@@ -528,13 +537,27 @@ window.__ModuleLoader__.load({ id: "dsh-skill-mcp-hub", factory: (require) => {
 
     return h("div", { className: "smx" },
       h("div", { className: "smx-head" },
-        h("span", { className: "smx-count" }, state
-          ? String(skills.length) + " 个技能 · 模型可见 " + skills.filter((s) => s.modelInvocable).length + " 个 · " + state.root
-          : ""),
+        h("span", { className: "smx-count" }, !state
+          ? ""
+          : needle !== ""
+            ? "命中 " + String(visible.length) + " / 共 " + String(skills.length) + " 个技能"
+            : String(skills.length) + " 个技能 · 模型可见 " + skills.filter((s) => s.modelInvocable).length + " 个 · " + state.root),
         h("span", { className: "smx-head__meta" },
           h("button", { type: "button", className: "smx-btn", onClick: () => setCreating((v) => !v) }, "＋ 新建"),
           h("button", { type: "button", className: "smx-btn", onClick: refresh }, "刷新"),
         ),
+      ),
+      h("div", { className: "smx-setting__row" },
+        h("input", {
+          type: "search",
+          className: "smx-input smx-input--wide",
+          value: query,
+          placeholder: "搜索技能：名字 / 描述 / 路径",
+          "aria-label": "搜索技能",
+          onChange: (event) => setQuery(event.target.value),
+          onKeyDown: (event) => { if (event.key === "Escape") setQuery(""); },
+        }),
+        needle !== "" ? h("button", { type: "button", className: "smx-btn", onClick: () => setQuery("") }, "清除") : null,
       ),
       notice ? h(Notice, { kind: "success", onDismiss: () => setNotice("") }, notice) : null,
       error ? h(Notice, { kind: "error", onDismiss: () => setError("") }, error) : null,
@@ -564,6 +587,7 @@ window.__ModuleLoader__.load({ id: "dsh-skill-mcp-hub", factory: (require) => {
       ) : null,
       loading ? h(Empty, null, "加载中…")
         : skills.length === 0 ? h(Empty, null, "技能目录里还没有 SKILL.md")
+        : visible.length === 0 ? h(Empty, null, "没有匹配「" + query.trim() + "」的技能")
         : h("ul", { className: "smx-list" }, rows),
     );
   }
